@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institute of Science Tokyo Institutional Research Section's Journey: Data Weaving the Future</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .timeline-line {
+            width: 4px;
+            background-image: linear-gradient(to bottom, #118AB2, #06D6A0, #674ea7);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        .timeline-event {
+            position: relative;
+            z-index: 1;
+        }
+        .flow-arrow {
+            position: relative;
+            padding: 2rem;
+            text-align: center;
+        }
+        .flow-arrow::after {
+            content: '▼';
+            font-size: 2.5rem;
+            color: #674ea7;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #674ea7;
+            animation: spin 1s ease infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#674ea7] mb-2">Data Weaving the Future</h1>
+            <p class="text-lg text-gray-600">Institute of Science Tokyo Institutional Research Section's Journey: Past to Future</p>
+        </header>
+
+        <main class="relative">
+            <div class="timeline-line hidden md:block"></div>
+            
+            <section class="mb-16 timeline-event">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold bg-[#FFD166] inline-block px-4 py-2 rounded-full text-gray-800">Pre-Integration: Two Streams (Past 5 Years: 2019 - Sep 2024)</h2>
+                    <p class="mt-2 text-gray-600">Each IR organization, with its unique strengths, supported university operations.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-[#118AB2]">
+                        <h3 class="text-2xl font-bold text-[#118AB2] mb-4">Former Tokyo Institute of Technology IR Org.</h3>
+                        <p class="mb-6 text-gray-600">Driven by advanced data analysis in engineering and science, it championed educational quality improvement and management strategy. Focused on learning analytics and **education & research activity** visualization.</p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-2 text-[#073B4C]">Main Activity Areas</h4>
+                            <p class="text-sm text-gray-500 mb-2">This doughnut chart illustrates the key focus areas over the past five years, showing a strong emphasis on educational outcome analysis. Labels are now directly on the slices for clarity.</p>
+                            <div class="chart-container h-64 md:h-72"><canvas id="titechActivitiesChart"></canvas></div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-[#073B4C]">Objectives</h4>
+                             <ul class="list-none space-y-2">
+                                <li class="flex items-start"><span class="text-[#118AB2] font-bold mr-2">📚</span>Improve education quality, curriculum, and teaching methods</li>
+                                <li class="flex items-start"><span class="text-[#118AB2] font-bold mr-2">🔬</span>Visualize and strengthen **education & research activities**</li>
+                                <li class="flex items-start"><span class="text-[#118AB2] font-bold mr-2">⚙️</span>Evidence-based decision-making support for university management</li>
+                            </ul>
+                            <button class="mt-4 bg-[#118AB2] text-white py-2 px-4 rounded-lg shadow hover:bg-opacity-90 transition-colors duration-300" onclick="openModal('explainIR')">✨ Explain IR Role</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-[#06D6A0]">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-4">Former Tokyo Medical and Dental University IR Org.</h3>
+                        <p class="mb-6 text-gray-600">As a comprehensive medical university, it prioritized data utilization in clinical settings alongside education and research, playing a vital role in improving medical quality and social contribution.</p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-2 text-[#073B4C]">Activity Focus</h4>
+                             <p class="text-sm text-gray-500 mb-2">The radar chart displays the balance of activities. It highlights a strong presence in education, research, and medical fields.</p>
+                            <div class="chart-container h-64 md:h-72"><canvas id="tmduActivitiesChart"></canvas></div>
+                        </div>
+                        <div>
+                             <h4 class="font-bold text-lg mb-2 text-[#073B4C]">Objectives</h4>
+                             <ul class="list-none space-y-2">
+                                <li class="flex items-start"><span class="text-[#06D6A0] font-bold mr-2">🎓</span>Improve education, research, and medical quality as a comprehensive medical university</li>
+                                <li class="flex items-start"><span class="text-[#06D6A0] font-bold mr-2">📈</span>Evidence-based management strategy promotion</li>
+                                <li class="flex items-start"><span class="text-[#06D6A0] font-bold mr-2">🏥</span>Self-assessment, evaluation, and information disclosure</li>
+                            </ul>
+                            <button class="mt-4 bg-[#06D6A0] text-white py-2 px-4 rounded-lg shadow hover:bg-opacity-90 transition-colors duration-300" onclick="openModal('explainIR')">✨ Explain IR Role</button>
+                        </div>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
+                    <h4 class="font-bold text-lg mb-2 text-center text-[#073B4C]">Comparison of Data Handled</h4>
+                    <p class="text-sm text-gray-500 mb-4 text-center">This chart shows the composition of data sources handled by both IR organizations. Tokyo Tech featured LMS and student learning behavior data, while TMDU was characterized by clinical data. University names are now correctly displayed on the Y-axis.</p>
+                    <div class="chart-container h-72 md:h-80"><canvas id="dataSourcesChart"></canvas></div>
+                </div>
+            </section>
+
+            <section class="my-16 timeline-event">
+                <div class="flow-arrow">
+                     <span class="text-6xl text-[#674ea7] opacity-0">🔗</span>
+                </div>
+                <div class="text-center">
+                     <h2 class="text-2xl font-bold bg-[#674ea7] inline-block px-4 py-2 rounded-full text-white">Integration (Oct 2024)</h2>
+                     <p class="mt-4 text-lg text-gray-600 md:w-2/3 mx-auto">Two excellent IR organizations united. The fusion of engineering and medical knowledge has created a more powerful and comprehensive Institutional Research Section with a comprehensive data foundation.</p>
+                </div>
+            </section>
+            
+            <section class="timeline-event">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl border-t-8 border-[#674ea7]">
+                    <h2 class="text-3xl font-bold text-center text-[#674ea7] mb-2">Institute of Science Tokyo Institutional Research Section: Current Activities</h2>
+                    <p class="text-center text-gray-600 mb-8">Supporting and accelerating new value creation, such as "Medical-Engineering Collaboration" and "Convergence Science," which fuse the strengths of both universities, using data.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                             <h3 class="text-xl font-bold mb-4 text-[#073B4C]">New Activity Objectives</h3>
+                             <p class="text-sm text-gray-500 mb-4">This chart indicates the priority of objectives for the integrated Institutional Research Section, with "promoting interdisciplinary fields" being the most crucial mission.</p>
+                            <div class="chart-container h-80"><canvas id="newGoalsChart"></canvas></div>
+                        </div>
+                        <div>
+                             <h3 class="text-xl font-bold mb-4 text-[#073B4C]">Evolution through Integration</h3>
+                            <ul class="list-none space-y-4 text-lg">
+                                <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">융</span>
+                                    <div><strong class="text-[#674ea7]">Integrated Data Analysis:</strong> Combining data from both former universities for multi-faceted evaluation of education and research outcomes in interdisciplinary fields (e.g., medical-engineering collaboration).</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">🤝</span>
+                                    <div><strong class="text-[#674ea7]">Strategic IR Consulting:</strong> Providing specialized data utilization and analysis support to various university departments, fostering a data-driven culture.</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">🌐</span>
+                                    <div><strong class="text-[#674ea7]">Strengthening International Competitiveness:</strong> Supporting global education, research, and medical initiatives through data.</div>
+                                </li>
+                                 <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">🚀</span>
+                                    <div><strong class="text-[#674ea7]">Acceleration of Innovation:</strong> Driving innovation by promoting and evaluating new research areas.</div>
+                                </li>
+                            </ul>
+                            <button class="mt-4 bg-[#674ea7] text-white py-2 px-4 rounded-lg shadow hover:bg-opacity-90 transition-colors duration-300" onclick="openModal('strategicInsights')">✨ Get Strategic Insights</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <footer class="text-center mt-16">
+                <p class="text-gray-500">&copy; 2025 Institute of Science Tokyo Office of Institute Strategy Institutional Research Section</p>
+            </footer>
+        </main>
+    </div>
+
+    <div id="llmModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle" class="text-2xl font-bold text-[#073B4C] mb-4"></h3>
+            <div id="modalContent" class="text-gray-700 leading-relaxed">
+                <div id="llmSpinner" class="spinner hidden"></div>
+                <p id="llmResponse"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function wrapText(label) {
+            const maxLength = 16;
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine ? ' ' : '') + word;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine.trim());
+            }
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: "'Roboto', sans-serif"
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback,
+                    },
+                    titleFont: {
+                        family: "'Roboto', sans-serif"
+                    },
+                    bodyFont: {
+                        family: "'Roboto', sans-serif"
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
+        };
+
+        const titechActivitiesData = {
+            labels: ['Enhanced Learning Analytics', 'Education & Research Activity Analysis', 'Management Strategy Support', 'IR Talent Development'].map(wrapText),
+            datasets: [{
+                label: 'Activity Ratio',
+                data: [45, 25, 20, 10],
+                backgroundColor: ['#118AB2', '#06D6A0', '#FFD166', '#FF6B6B'],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+        new Chart(document.getElementById('titechActivitiesChart'), {
+            type: 'doughnut',
+            data: titechActivitiesData,
+            options: {
+                ...commonChartOptions,
+                cutout: '50%',
+                plugins: {
+                    legend: {
+                        display: false 
+                    },
+                    datalabels: {
+                        color: '#000', 
+                        textAlign: 'center',
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        formatter: (value, ctx) => {
+                            let label = ctx.chart.data.labels[ctx.dataIndex];
+                            if (Array.isArray(label)) {
+                                label = label.join(' ');
+                            }
+                            return label + '\n' + value + '%';
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback,
+                        },
+                        titleFont: {
+                            family: "'Roboto', sans-serif"
+                        },
+                        bodyFont: {
+                            family: "'Roboto', sans-serif"
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] 
+        });
+
+        const tmduActivitiesData = {
+            labels: ['Academic Data Analysis', 'Research Activity Analysis', 'Medical Activity Analysis', 'Internationalization Support', 'Social Contribution Analysis'].map(wrapText),
+            datasets: [{
+                label: 'Activity Focus Level',
+                data: [8, 7, 9, 6, 7],
+                backgroundColor: 'rgba(6, 214, 160, 0.2)',
+                borderColor: '#06D6A0',
+                pointBackgroundColor: '#06D6A0',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#06D6A0'
+            }]
+        };
+        new Chart(document.getElementById('tmduActivitiesChart'), {
+            type: 'radar',
+            data: tmduActivitiesData,
+            options: {
+                ...commonChartOptions,
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: { font: { size: 12, family: "'Roboto', sans-serif" } },
+                        suggestedMin: 0,
+                        suggestedMax: 10
+                    }
+                }
+            }
+        });
+        
+        const dataSourcesData = {
+            labels: ['Former Tokyo Institute of Technology', 'Former Tokyo Medical and Dental University'].map(wrapText),
+            datasets: [
+                {
+                    label: 'Student/Academic Data',
+                    data: [40, 35],
+                    backgroundColor: '#118AB2',
+                },
+                {
+                    label: 'Research/Publication Data',
+                    data: [30, 25],
+                    backgroundColor: '#FFD166',
+                },
+                 {
+                    label: 'LMS/Learning Behavior Data',
+                    data: [20, 5],
+                    backgroundColor: '#FF6B6B',
+                },
+                {
+                    label: 'Financial/Management Data',
+                    data: [10, 10],
+                     backgroundColor: '#073B4C',
+                },
+                {
+                    label: 'Medical/Clinical Data',
+                    data: [0, 25],
+                    backgroundColor: '#06D6A0',
+                }
+            ]
+        };
+        new Chart(document.getElementById('dataSourcesChart'), {
+            type: 'bar',
+            data: dataSourcesData,
+            options: {
+                ...commonChartOptions,
+                scales: {
+                    x: { stacked: true, ticks: {font: {family: "'Roboto', sans-serif"}, callback: value => value + "%"}},
+                    y: { stacked: true, ticks: {font: {family: "'Roboto', sans-serif"}, callback: function(value, index, ticks) { return this.getLabelForValue(value); } } } 
+                },
+                indexAxis: 'y',
+            }
+        });
+        
+        const newGoalsData = {
+            labels: [
+                'Promote Interdisciplinary Education/Research', 
+                'Strategic IR Consulting', 
+                'Efficient/Effective University Management', 
+                'Strengthen International Competitiveness'
+            ].map(wrapText),
+            datasets: [{
+                label: 'Priority of Objectives',
+                data: [95, 85, 80, 75],
+                backgroundColor: ['#674ea7', '#8e7cc3', '#b4a7d6', '#d9d2e9'],
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                borderRadius: 5
+            }]
+        };
+         new Chart(document.getElementById('newGoalsChart'), {
+            type: 'bar',
+            data: newGoalsData,
+            options: {
+                 ...commonChartOptions,
+                 indexAxis: 'y',
+                 plugins: {
+                     legend: { display: false }
+                 },
+                 scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {font: {family: "'Roboto', sans-serif"}}
+                    },
+                    y: {
+                        ticks: {font: {family: "'Roboto', sans-serif"}}
+                    }
+                 }
+            }
+        });
+
+        const llmModal = document.getElementById('llmModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const llmSpinner = document.getElementById('llmSpinner');
+        const llmResponse = document.getElementById('llmResponse');
+
+        function openModal(type) {
+            llmModal.style.display = 'block';
+            llmSpinner.classList.remove('hidden');
+            llmResponse.textContent = '';
+            
+            let prompt = '';
+            if (type === 'explainIR') {
+                modalTitle.textContent = 'Understanding the Role of IR';
+                prompt = "Please explain the role and typical activities of an Institutional Research (IR) organization in a university setting, focusing on data analysis, objectives for educational improvement, and management strategy support. Keep it concise.";
+            } else if (type === 'strategicInsights') {
+                modalTitle.textContent = 'Strategic Insights for the New IR Department';
+                prompt = "Based on the goals of the Institute of Science Tokyo Institutional Research Section (Promote Interdisciplinary Education/Research, Strategic IR Consulting, Efficient/Effective University Management, Strengthen International Competitiveness) and its focus on medical-engineering collaboration and convergence science, what are 3 key strategic insights or initiatives this section could pursue to maximize its impact? Focus on practical, data-driven ideas.";
+            }
+
+            fetchLLMResponse(prompt);
+        }
+
+        function closeModal() {
+            llmModal.style.display = 'none';
+        }
+
+        async function fetchLLMResponse(prompt) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    llmResponse.textContent = text;
+                } else {
+                    llmResponse.textContent = 'Error: Could not retrieve response from LLM.';
+                }
+            } catch (error) {
+                console.error('Error fetching LLM response:', error);
+                llmResponse.textContent = 'Error: Failed to connect to LLM service. Please try again later.';
+            } finally {
+                llmSpinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東京科学大学 IR部門の歩み：データが紡ぐ未来</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .timeline-line {
+            width: 4px;
+            background-image: linear-gradient(to bottom, #118AB2, #06D6A0, #674ea7);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        .timeline-event {
+            position: relative;
+            z-index: 1;
+        }
+        .flow-arrow {
+            position: relative;
+            padding: 2rem;
+            text-align: center;
+        }
+        .flow-arrow::after {
+            content: '▼';
+            font-size: 2.5rem;
+            color: #674ea7;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #674ea7;
+            animation: spin 1s ease infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#674ea7] mb-2">データが紡ぐ大学の未来</h1>
+            <p class="text-lg text-gray-600">東京科学大学 IR部門の歩み：過去から未来へ</p>
+        </header>
+
+        <main class="relative">
+            <div class="timeline-line hidden md:block"></div>
+            
+            <section class="mb-16 timeline-event">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold bg-[#FFD166] inline-block px-4 py-2 rounded-full text-gray-800">統合前：二つの潮流 (過去5年間: 2019-2024.9)</h2>
+                    <p class="mt-2 text-gray-600">それぞれが独自の強みを持ち、大学運営を支えてきたIR組織。</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-[#118AB2]">
+                        <h3 class="text-2xl font-bold text-[#118AB2] mb-4">旧・東京工業大学 IR組織</h3>
+                        <p class="mb-6 text-gray-600">工学・理学分野の高度なデータ分析を基盤に、教育の質向上と経営戦略を牽引。ラーニングアナリティクスと教育研究活動の可視化に注力していました。</p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-2 text-[#073B4C]">主な活動領域</h4>
+                            <p class="text-sm text-gray-500 mb-2">過去5年間における活動の重点領域を円グラフで示します。教育成果の分析に最も注力していたことが分かります。ラベルは各スライスに直接表示され、より明確になりました。</p>
+                            <div class="chart-container h-64 md:h-72"><canvas id="titechActivitiesChart"></canvas></div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-[#073B4C]">活動の目的</h4>
+                             <ul class="list-none space-y-2">
+                                <li class="flex items-start"><span class="text-[#118AB2] font-bold mr-2">📚</span>教育の質向上、カリキュラム・授業改善</li>
+                                <li class="flex items-start"><span class="text-[#118AB2] font-bold mr-2">🔬</span>教育研究活動の可視化と強化</li>
+                                <li class="flex items-start"><span class="text-[#118AB2] font-bold mr-2">⚙️</span>エビデンスに基づいた大学経営意思決定支援</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-8 border-[#06D6A0]">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-4">旧・東京医科歯科大学 IR組織</h3>
+                        <p class="mb-6 text-gray-600">医療系総合大学として、教育・研究に加え、臨床現場のデータ活用を重視。医療の質向上と社会貢献に不可欠な役割を担っていました。</p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-2 text-[#073B4C]">活動の焦点</h4>
+                             <p class="text-sm text-gray-500 mb-2">レーダーチャートは活動のバランスを示しています。教育、研究、医療の各分野で高いレベルの分析活動を展開していたことが特徴です。</p>
+                            <div class="chart-container h-64 md:h-72"><canvas id="tmduActivitiesChart"></canvas></div>
+                        </div>
+                        <div>
+                             <h4 class="font-bold text-lg mb-2 text-[#073B4C]">活動の目的</h4>
+                             <ul class="list-none space-y-2">
+                                <li class="flex items-start"><span class="text-[#06D6A0] font-bold mr-2">🎓</span>医療系総合大学としての教育・研究・医療の質向上</li>
+                                <li class="flex items-start"><span class="text-[#06D6A0] font-bold mr-2">📈</span>エビデンスに基づいた経営戦略推進</li>
+                                <li class="flex items-start"><span class="text-[#06D6A0] font-bold mr-2">🏥</span>自己点検・評価と情報公開</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg mt-8">
+                    <h4 class="font-bold text-lg mb-2 text-center text-[#073B4C]">扱っていたデータの比較</h4>
+                    <p class="text-sm text-gray-500 mb-4 text-center">両大学のIR組織が扱っていたデータソースの構成比です。東工大はLMSなど学生の学習行動データが、医科歯科大は診療関連データが特徴的でした。</p>
+                    <div class="chart-container h-72 md:h-80"><canvas id="dataSourcesChart"></canvas></div>
+                </div>
+            </section>
+
+            <section class="my-16 timeline-event">
+                <div class="text-center">
+                     <h2 class="text-2xl font-bold bg-[#674ea7] inline-block px-4 py-2 rounded-full text-white">統合 (2024.10)</h2>
+                     <p class="mt-4 text-lg text-gray-600 md:w-2/3 mx-auto">二つの優れたIR組織が一つに。工学知と医学知が融合し、広範なデータ基盤を持つ、より強力なIR部門が誕生しました。</p>
+                </div>
+            </section>
+            
+            <section class="timeline-event">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl border-t-8 border-[#674ea7]">
+                    <h2 class="text-3xl font-bold text-center text-[#674ea7] mb-2">東京科学大学 IR部門：現在の活動</h2>
+                    <p class="text-center text-gray-600 mb-8">「医工連携」「コンバージェンス・サイエンス」といった新たな価値創造を、データで支え、加速させます。</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                             <h3 class="text-xl font-bold mb-4 text-[#073B4C]">新たな活動の目的</h3>
+                             <p class="text-sm text-gray-500 mb-4">統合後のIR部門が目指す目的の優先度です。「融合領域の推進」が最も重要なミッションとなっています。</p>
+                            <div class="chart-container h-80"><canvas id="newGoalsChart"></canvas></div>
+                        </div>
+                        <div>
+                             <h3 class="text-xl font-bold mb-4 text-[#073B4C]">統合による進化</h3>
+                            <ul class="list-none space-y-4 text-lg">
+                                <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">융</span>
+                                    <div><strong class="text-[#674ea7]">統合データ分析:</strong> 両大学のデータを組み合わせ、医工連携など融合領域の教育・研究成果を多角的に評価。</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">🤝</span>
+                                    <div><strong class="text-[#674ea7]">戦略的IRコンサルティング:</strong> 学内各部局への専門的なデータ利用・分析支援を提供し、データ駆動型文化を醸成。</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">🌐</span>
+                                    <div><strong class="text-[#674ea7]">国際競争力強化:</strong> グローバルな視点での教育・研究・医療展開をデータで支援。</div>
+                                </li>
+                                 <li class="flex items-start">
+                                    <span class="text-2xl text-[#674ea7] mr-3">🚀</span>
+                                    <div><strong class="text-[#674ea7]">イノベーション創出の加速:</strong> 新たな研究領域の推進と評価を通じて、イノベーションを加速。</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <footer class="text-center mt-16">
+                <p class="text-gray-500">&copy; 2025 東京科学大学 戦略本部 IR部門</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function wrapText(label) {
+            const maxLength = 16;
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine ? ' ' : '') + word;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine.trim());
+            }
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: "'Noto Sans JP', sans-serif"
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback,
+                    },
+                    titleFont: {
+                        family: "'Noto Sans JP', sans-serif"
+                    },
+                    bodyFont: {
+                        family: "'Noto Sans JP', sans-serif"
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            }
+        };
+
+        const titechActivitiesData = {
+            labels: ['ラーニングアナリティクス強化', '教育研究活動分析', '経営戦略支援', 'IR人材育成'].map(wrapText),
+            datasets: [{
+                label: '活動割合',
+                data: [45, 25, 20, 10],
+                backgroundColor: ['#118AB2', '#06D6A0', '#FFD166', '#FF6B6B'],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+        new Chart(document.getElementById('titechActivitiesChart'), {
+            type: 'doughnut',
+            data: titechActivitiesData,
+            options: {
+                ...commonChartOptions,
+                cutout: '50%',
+                plugins: {
+                    legend: {
+                        display: false 
+                    },
+                    datalabels: {
+                        color: '#000', 
+                        textAlign: 'center',
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        formatter: (value, ctx) => {
+                            let label = ctx.chart.data.labels[ctx.dataIndex];
+                            if (Array.isArray(label)) {
+                                label = label.join(' ');
+                            }
+                            return label + '\n' + value + '%';
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback,
+                        },
+                        titleFont: {
+                            family: "'Noto Sans JP', sans-serif"
+                        },
+                        bodyFont: {
+                            family: "'Noto Sans JP', sans-serif"
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] 
+        });
+
+        const tmduActivitiesData = {
+            labels: ['教学データ分析', '研究活動分析', '医療活動分析', '国際化支援', '社会貢献分析'].map(wrapText),
+            datasets: [{
+                label: '活動焦点レベル',
+                data: [8, 7, 9, 6, 7],
+                backgroundColor: 'rgba(6, 214, 160, 0.2)',
+                borderColor: '#06D6A0',
+                pointBackgroundColor: '#06D6A0',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#06D6A0'
+            }]
+        };
+        new Chart(document.getElementById('tmduActivitiesChart'), {
+            type: 'radar',
+            data: tmduActivitiesData,
+            options: {
+                ...commonChartOptions,
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: { font: { size: 12, family: "'Noto Sans JP', sans-serif" } },
+                        suggestedMin: 0,
+                        suggestedMax: 10
+                    }
+                }
+            }
+        });
+        
+        const dataSourcesData = {
+            labels: ['旧・東京工業大学', '旧・東京医科歯科大学'].map(wrapText),
+            datasets: [
+                {
+                    label: '学生・教務データ',
+                    data: [40, 35],
+                    backgroundColor: '#118AB2',
+                },
+                {
+                    label: '研究・論文データ',
+                    data: [30, 25],
+                    backgroundColor: '#FFD166',
+                },
+                 {
+                    label: 'LMS・学習行動データ',
+                    data: [20, 5],
+                    backgroundColor: '#FF6B6B',
+                },
+                {
+                    label: '財務・経営データ',
+                    data: [10, 10],
+                     backgroundColor: '#073B4C',
+                },
+                {
+                    label: '医療・診療データ',
+                    data: [0, 25],
+                    backgroundColor: '#06D6A0',
+                }
+            ]
+        };
+        new Chart(document.getElementById('dataSourcesChart'), {
+            type: 'bar',
+            data: dataSourcesData,
+            options: {
+                ...commonChartOptions,
+                scales: {
+                    x: { stacked: true, ticks: {font: {family: "'Noto Sans JP', sans-serif"}, callback: value => value + "%"}},
+                    y: { stacked: true, ticks: {font: {family: "'Noto Sans JP', sans-serif"}, callback: function(value, index, ticks) { return this.getLabelForValue(value); } } } 
+                },
+                indexAxis: 'y',
+            }
+        });
+        
+        const newGoalsData = {
+            labels: [
+                '融合領域の教育・研究推進', 
+                '戦略的IRコンサルティング', 
+                '効率的・効果的な大学運営', 
+                '国際競争力の強化'
+            ].map(wrapText),
+            datasets: [{
+                label: '活動目的の優先度',
+                data: [95, 85, 80, 75],
+                backgroundColor: ['#674ea7', '#8e7cc3', '#b4a7d6', '#d9d2e9'],
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                borderRadius: 5
+            }]
+        };
+         new Chart(document.getElementById('newGoalsChart'), {
+            type: 'bar',
+            data: newGoalsData,
+            options: {
+                 ...commonChartOptions,
+                 indexAxis: 'y',
+                 plugins: {
+                     legend: { display: false }
+                 },
+                 scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {font: {family: "'Noto Sans JP', sans-serif"}}
+                    },
+                    y: {
+                        ticks: {font: {family: "'Noto Sans JP', sans-serif"}}
+                    }
+                 }
+            }
+        });
+    </script>
+</body>
+</html>
